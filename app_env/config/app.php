@@ -162,6 +162,10 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        //https://stackoverflow.com/questions/30560485/create-models-from-database-in-laravel
+        // dich vu can model
+        Reliese\Coders\CodersServiceProvider::class,
+
         /*
          * Package Service Providers...
          */
@@ -174,6 +178,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+
 
     ],
 
