@@ -23,9 +23,23 @@
         <p>Nha san xuat</p>
         <h6>
             @foreach($nhaSanXuats as $item)
+                <?php $sale = $item->IdNSX + 1; ?>    
                 <tr>
                     <td>{{$item->IdNSX}}</td>
                     <td>{{$item->TenNSX}}</td>
+                    <td>{{$sale}}</td>
+                    <td>
+                        <img src="https://scr.vn/wp-content/uploads/2020/08/H%C3%8CNH-%E1%BA%A2NH-M%E1%BA%A0NG-%C4%90%E1%BA%B8P.jpg" >
+                    </td>
+                    <td>
+                        <img src="https://i.imgur.com/fONSj63.jpg" >
+                    </td>
+                    <td>
+                        <img src="https://imgur.com/fONSj63" referrerpolicy="no-referrer >
+                    </td>
+                    <td>
+                    <blockquote class="imgur-embed-pub" lang="en" data-id="fONSj63"><a href="https://imgur.com/fONSj63">View post on imgur.com</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+                    </td>
                 </tr>
             @endforeach
         </h6>

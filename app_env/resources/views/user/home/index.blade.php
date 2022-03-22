@@ -1,10 +1,17 @@
-<?php
-  include_once("./app_env/resources/views/layout/headerUser.blade.php");
-?>
+<!--
+<h1>ok</h1>
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      @include('user.htmlhead')
+  </head>
+</html>
 <body>
+  @include('user.headeruser')
 
-    <!-- body-->
-    <main id="main" role="main">
+<!-- body-->
+<main id="main" role="main">
         <!-- slider-->
         <div id="shopify-section-slideshow" class="shopify-section">
 
@@ -17,15 +24,15 @@
                 </div>
                 <div class="carousel-inner flickity-viewport">
                   <div class="carousel-item active" data-bs-interval="2000">
-                    <img src="~/img/thit.jpg" class="d-block w-100">
+                    <img src="{{asset('AdminLTE/img/thit.jpg')}}" class="d-block w-100">
                     <div class="carousel-caption d-none d-md-block">
                       <h2 class="slideshow__title heading h1">BÁN THỰC PHẨM SẠCH</h2>
                     </div>
                   </div>
                   <div class="carousel-item" data-bs-interval="2000">
-                    <img src="~/img/do an.jpg" class="d-block w-100" alt="...">
+                    <img src="{{asset('AdminLTE/img/do_an.jpg')}}" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
-                      <h2 class="slideshow__title heading h1">CHỈ DẪN NẤU ĂN</h2>
+                      <h2 class="slideshow__title heading h1">THỰC PHẨM GIÀU DINH DƯỠNG</h2>
                     </div>
                   </div>
                 </div>
@@ -52,7 +59,7 @@
                             <h2 class="section__title heading h3">TOP SẢN PHẨM </h2>
 
                         </div>
-                        <a href="@Url.Action("Index","ListFood")" class="section__action-link link">View all</a>
+                        <a href="{url('/hamho')}" class="section__action-link link">View all</a>
                     </header>
                 </div>
                 <!-- sản phẩm-->
@@ -62,60 +69,72 @@
                         <div class="flickity-viewport" style="height: 500px; touch-action: pan-y;">
                           <div class="product-list product-list--vertical product-list--scrollable flickity-enabled" tabindex="0">
 
-                            @foreach (var item in Model.ToList())
-                            {
+                            @foreach ($thucPhams as $item)
                           <div>
                             <div>
-
-
                               <div class="product-item product-item--vertical 1/4--lap 1/5--desk 1/6--wide is-selected" style=" left:20%;">
-                                <a href="@Url.Action("Index","Food",new { id = item.IdFood })" class="product-item__image-wrapper product-item__image-wrapper--with-secondary">
+                                <a href="<?php echo url('Food/index?id='.$item->IdThucPham) ?>" class="product-item__image-wrapper product-item__image-wrapper--with-secondary">
                                   <div class="aspect-ratio " style="height: 133px; width: 133px; padding-bottom: 100.0%">
-                                    <img class="product-item__primary-image image--fade-in lazyautosizes lazyloaded" src="@item.LinkHinhAnh" />
+                                    <img class="product-item__primary-image image--fade-in lazyautosizes lazyloaded" src="<?php echo $item->LinkHinhAnh ?>" />
                                   </div>
                                 </a><div class="product-item__info">
                                       <div class="product-item__info-inner">
-                                        @*<a class="product-item__vendor link" href="/collections/vendors?q=HARRYS">HARRYS</a>*@
-                                        <a href="@Url.Action("Index","Food",new { id = item.IdFood })" class="product-item__title text--strong link">@item.NameFood</a>
+                                        <a href="<?php echo url('Food/index?id='.$item->IdThucPham) ?>" class="product-item__title text--strong link">{{$item->TenThucPham}}</a>
                                         <div class="product-item__price-list price-list">
-                                          @if (list1.FirstOrDefault(p => p.IdKhuyenMai == item.IdKhuyenMai) != null)
-                                          {
-                                            var sale = item.Price * (100 - list1.FirstOrDefault(p => p.IdKhuyenMai == item.IdKhuyenMai).PhanTramKhuyenMai) / 100;
-                                      <span class="price price--highlight">
-                                        <span class="visually-hidden">Giá sale</span>@sale₫
-                                      </span>
+                                           @if (($item->IdKhuyenMai)!= null)
+                                              @foreach($khuyenMais as $item0)
+                                                @if($item0->IdKhuyenMai == $item->IdKhuyenMai)
+                                                <?php  
+                                                  $sale = $item->GiaBan * (100 - $item0->PhanTramKhuyenMai) /100;
+                                                ?>
+                                                  <span class="price price--highlight">
+                                              <span class="visually-hidden">Giá sale</span>{{$sale}}₫
+                                              </span>
                                                 <span class="price price--compare">
-                                                  <span class="visually-hidden">Giá gốc</span>@item.Price₫
-                                                </span> }
-                                              else
-                                              {
-                                      <span class="price price--highlight">
-                                        <span class="visually-hidden">Giá gốc</span>@item.Price₫
-                                      </span>}
-
+                                                  <span class="visually-hidden">Giá gốc</span>{{$item->GiaBan}}₫
+                                                </span> 
+                                                  @break
+                                                @endif
+                                              @endforeach
+                                              
+                                            @else
+                                              <span class="price price--highlight">
+                                                <span class="visually-hidden">Giá gốc</span>{{$item->GiaBan}}₫
+                                              </span>
+                                      
+                                            @endif
                                         </div>
-
-                                        @if (list0.FindAll(p => p.IdFood == item.IdFood).FirstOrDefault(p => p.SoLuong > 0) != null)
-                                        {
-                                      @using Microsoft.AspNetCore.Http.Extensions;
-                                                <form method="get" action="../GioHang/ThemGioHang" id="product_form_id_6806124495026_1624509122e13fa354" accept-charset="UTF-8" class="product-item__action-list button-stack" enctype="multipart/form-data">
+                                        <?php
+                                              $loHangConKo = false;
+                                        ?> 
+                                        @foreach($loHangs as $itemLoHang)
+                                          @if(($itemLoHang->IdThucPham == $item->IdThucPham) && ($itemLoHang->SoLuong>0))
+                                            <?php
+                                              $loHangConKo = true;
+                                            ?>  
+                                            <form method="get" action="../GioHang/ThemGioHang" id="product_form_id_6806124495026_1624509122e13fa354" accept-charset="UTF-8" class="product-item__action-list button-stack" enctype="multipart/form-data">
                                                   <input type="hidden" name="IdFood" value="@item.IdFood">
                                                   <input type="hidden" name="strURL" value="@Context.Request.GetDisplayUrl()">
                                                   <button type="submit" class="product-item__action-button button button--small button--primary" data-action="add-to-cart">Thêm vào giỏ</button>
-                                                </form> }
-                                              else
-                                              {
-                                              <form method="get" accept-charset="UTF-8" class="product-item__action-list button-stack" enctype="multipart/form-data">                               
+                                              </form>
+                                            @break
+                                          @endif
+                                        @endforeach
+                                        @if (!$loHangConKo)
+                                        <form method="get" accept-charset="UTF-8" class="product-item__action-list button-stack" enctype="multipart/form-data">                               
                                                 <button class="product-item__action-button button button--small button--disabled" disabled="" style="cursor: not-allowed;">Hết hàng</button>
                                               </form>
-                                              }
+                                        @endif
 
                                       </div>
 
                                 </div>
                               </div>
                             </div>
-                          </div>}
+                          </div>
+
+                          @endforeach
+
                           </div>
                           </div>
                         </div>
@@ -128,12 +147,18 @@
         <!-- end list sản phẩm-->
     </main>
 
+  <?php /*
+  
+    */?>
+
+  @include('user.footeruser')
 </body>
 
 
-<?php
-  include_once("./app_env/resources/views/layout/footeruser.blade.php");
-?>
+
+
+
+
 
 
 

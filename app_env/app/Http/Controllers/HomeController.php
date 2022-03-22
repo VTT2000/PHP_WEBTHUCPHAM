@@ -21,8 +21,7 @@ class HomeController extends Controller
         $loHangs = $DB::table('lohang')->get();
         $khuyenMais = $DB::table('khuyenmai')->get();
         $thucPhams = $DB::table('thucpham')->get();
-
-
+        //$request->get('')
 
         return view('user/home/index')
             ->with("KhachHangIdKH", $request->session()->get('KhachHangIdKH'))

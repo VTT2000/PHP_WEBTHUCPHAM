@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,700italic,400italic" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/app_env/public/AdminLTE/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/app_env/public/AdminLTE/css/site.css" />
-    <title>{{$title}} - HomeCooking</title>
-</head>
-<body>
+    <script src="{{ asset('AdminLTE/lib/jquery/dist/jquery.js') }}"></script>
+    <script src="{{ asset('AdminLTE/lib/jquery/dist/jquery.leanModal.min.js') }}"></script>
+    <script src="{{ asset('AdminLTE/lib/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 
-    <script src="/app_env/public/AdminLTE/lib/jquery/dist/jquery.js"></script>
-    <script src="/app_env/public/AdminLTE/lib/jquery/dist/jquery.leanModal.min.js"></script>
-    <script src="/app_env/public/AdminLTE/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
     <div id="shopify-section-header" class="shopify-section shopify-section__header">
         <section data-section-id="header" data-section-type="header">
@@ -23,7 +11,7 @@
                     <div class="header__inner">
                         <h1 class="header__logo">
                             <a href="home" class="header__logo-link">
-                                <img class="header__logo-image" style="max-width: 140px" width="941" height="295" src="/app_env/public/AdminLTE/img/logo.png" alt="VITAMIN HOUSE">
+                                <img class="header__logo-image" style="max-width: 140px" width="941" height="295" src="{{ asset('AdminLTE/img/logo.png') }}" alt="VITAMIN HOUSE">
                             </a>
                         </h1>
                         <div class="header__search-bar-wrapper " id="outBoxSearch">
@@ -200,19 +188,12 @@
                                         location.href = "https://" + location.host + "/Home/LogOut";
                                     }
                                 </script>
-
-
-                                @using Microsoft.AspNetCore.Http
-                                @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-
-                                @if (!String.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("KhachHangIdKH")))
-                                {
+                                
+                                @if (false)
                                     <input id="IsCheckedFB" value="0" type="hidden" />
                                     <div hidden class="g-signin2" data-onsuccess="onSignIn"></div>
                                     <a class="header__action-item-title hidden-pocket hidden-lap" href="@Url.Action("Index", "Account")">Chào, @HttpContextAccessor.HttpContext.Session.GetString("KhachHangName").ToString() </a>
-                                }
-                                else
-                                {
+                                @else
                                     <input id="IsCheckedFB" value="1" type="hidden" />
                                     <a class="header__action-item-title hidden-pocket hidden-lap" id="modal_trigger" href="#modal" onclick="refreshNewError();">Đăng nhập/ Đăng ký</a>
                                     <div class="header__action-item-content">
@@ -343,10 +324,7 @@
                                                         <br />
                                                         <p id="showErrorDangKy" style="color:red"></p>
 
-                                                        @*<div class="checkbox">
-                                                                <input id="send_updates" type="checkbox" />
-                                                                <label for="send_updates">Send me occasional email updates</label>
-                                                            </div>*@
+                                                    
 
                                                         <div class="action_btns">
                                                             <div class="one_half"><a href="#" class="btn back_btn" onclick="refreshNewError();"><i class="fa fa-angle-double-left"></i> Back</a></div>
@@ -407,7 +385,7 @@
 
                                     </div>
 
-                                }
+                                @endif
 
 
 
@@ -419,7 +397,6 @@
 
 
                             <div class="header__action-item header__action-item--cart">
-                                @*<a class="header__action-item-link header__cart-toggle" href="@Url.Action("Index","GioHang")" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown">*@
                                 <a class="header__action-item-link header__cart-toggle" href="@Url.Action("Index","GioHang")" role="button">
                                     <div class="header__action-item-content">
                                         <div class="header__cart-icon icon-state">
@@ -433,71 +410,18 @@
                                                 </svg>
                                             </span>
                                         </div>
-                                        @using Newtonsoft.Json;
-                                        @if (!String.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("GioHang")))
-                                        {
-                                            List<GioHang> listGioHang = JsonConvert.DeserializeObject<List<GioHang>>(HttpContextAccessor.HttpContext.Session.GetString("GioHang"));
-                                            <span class="hidden-pocket hidden-lap"> Giỏ hàng (@listGioHang.Sum(p => p.zSoLuong)) </span>
-                                        }
-                                        else
-                                        {
+                                        @if ($GioHangSoLuong != 0)
+                                        
+                                            <span class="hidden-pocket hidden-lap"> Giỏ hàng ({{$GioHangSoLuong}}) </span>
+                                        
+                                        @else
+                                        
                                             <span class="hidden-pocket hidden-lap"> Giỏ hàng</span>
-                                        }
+                                        @endif
                                     </div>
                                 </a>
                                 <!-- menu giỏ hàng-->
-                                @*<div class="dropdown-menu">
-                                        <form method="post" id="mini-cart" class="mini-cart">
-
-                                            <svg focusable="false" class="icon icon--nav-triangle-borderless" viewBox="0 0 20 9" role="presentation">
-                                                <path d="M.47108938 9c.2694725-.26871321.57077721-.56867841.90388257-.89986354C3.12384116 6.36134886 5.74788116 3.76338565 9.2467995.30653888c.4145057-.4095171 1.0844277-.40860098 1.4977971.00205122L19.4935156 9H.47108938z" fill="#ffffff"></path>
-                                            </svg><div class="mini-cart__inner">
-                                                <div class="mini-cart__content">
-                                                    <div class="mini-cart__line-item-list">
-                                                        <div class="mini-cart__line-item">
-                                                            <div class="mini-cart__image-wrapper">
-                                                                <div class="aspect-ratio" style="padding-bottom: 100.0%">
-                                                                    <img src="~/img/thit-bo-my.jpg">
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="mini-cart__item-wrapper">
-                                                                <div class="mini-cart__product-info"><a class="mini-cart__product-vendor link" href="#">HARRYS</a><a href="#" class="mini-cart__product-title text--strong link">Thịt bò mỹ 500G</a><div class="mini-cart__price-list"><span class="price">129.000₫</span></div></div><div class="mini-cart__quantity">
-                                                                    <div class="quantity-selector">
-                                                                        <button class="quantity-selector__button" data-action="decrease-quantity" data-quantity="0" data-line-id="40249814745266:f1efa900baaf8884faba9679416f43cd" aria-label="Giảm số lượng xuống 1" title="Giảm số lượng xuống 1">
-                                                                            <svg focusable="false" class="icon icon--minus" viewBox="0 0 10 2" role="presentation">
-                                                                                <path d="M10 0v2H0V0z" fill="currentColor"></path>
-                                                                            </svg>
-                                                                        </button>
-                                                                        <input aria-label="Số lượng" class="quantity-selector__value" inputmode="numeric" data-current-value="1" data-line-id="40249814745266" value="1" size="2">
-                                                                        <button class="quantity-selector__button" data-action="increase-quantity" data-quantity="2" data-line-id="40249814745266:f1efa900baaf8884faba9679416f43cd" aria-label="Tăng số lượng lên 1" title="Tăng số lượng lên 1">
-                                                                            <svg focusable="false" class="icon icon--plus" viewBox="0 0 10 10" role="presentation">
-                                                                                <path d="M6 4h4v2H6v4H4V6H0V4h4V0h2v4z" fill="currentColor" fill-rule="evenodd"></path>
-                                                                            </svg>
-                                                                        </button>
-                                                                    </div>
-
-                                                                    <a href="/cart/change?quantity=0&amp;id=40249814745266:f1efa900baaf8884faba9679416f43cd" data-action="decrease-quantity" data-quantity="0" data-line-id="40249814745266:f1efa900baaf8884faba9679416f43cd" class="mini-cart__quantity-remove link">Loại bỏ</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="mini-cart__recap">
-                                                    <div class="mini-cart__recap-price-line">
-                                                        <span>Tổng cộng</span>
-                                                        <span style="display: block; text-align: right;" class="saw-extra-note"></span><span class="saw-cart-original-total"><span>129.000₫</span></span><br><span class="saw-cart-total"></span>
-                                                    </div><div class="mini-cart__button-container">
-                                                        <div class="button-group button-group--loose button-group--fit">
-                                                            <a href="/cart" class="button button--secondary">Xem giỏ hàng</a><button type="submit" name="checkout" class="button button--primary">Thanh toán</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>*@
+                                
 
 
 
@@ -513,8 +437,8 @@
                 <div class="nav-bar__inner">
                     <div class="container">
                       <ul class="nav-bar__linklist list--unstyled" data-type="menu" role="list">
-                        <li class="nav-bar__item"><a href="@Url.Action("Index","ListFood")" class="nav-bar__link link" data-type="menuitem">TẤT CẢ SẢN PHẨM</a></li>
-                        @await Component.InvokeAsync("ViewLoaiThucPham")
+                        <li class="nav-bar__item"><a href="{{ url('page') }} @Url.Action("Index","ListFood")" class="nav-bar__link link" data-type="menuitem">TẤT CẢ SẢN PHẨM</a></li>
+                        <!--@await Component.InvokeAsync("ViewLoaiThucPham")-->
                         <li class="nav-bar__item"><a href="@Url.Action("FoodDuocKM","ListFood")" class="nav-bar__link link" data-type="menuitem">KHUYẾN MÃI</a></li>
                         <li class="nav-bar__item"><a href="@Url.Action("Index","CongThucNauAn")" class="nav-bar__link link" data-type="menuitem">BLOG NẤU ĂN</a></li>
                       </ul>
@@ -522,5 +446,8 @@
                 </div>
             </nav>
         </section>
-    </div>
-    <!-- end nav bar-->
+    </div>    
+
+
+    
+<!-- end nav bar-->
