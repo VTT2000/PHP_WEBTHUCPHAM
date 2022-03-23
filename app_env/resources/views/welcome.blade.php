@@ -35,7 +35,7 @@
                         <img src="https://i.imgur.com/fONSj63.jpg" >
                     </td>
                     <td>
-                        <img src="https://imgur.com/fONSj63" referrerpolicy="no-referrer >
+                        <img src="https://imgur.com/fONSj63" referrerpolicy="no-referrer" >
                     </td>
                     <td>
                     <blockquote class="imgur-embed-pub" lang="en" data-id="fONSj63"><a href="https://imgur.com/fONSj63">View post on imgur.com</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Lohang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cookie;
 
 class HomeController extends Controller
 {
@@ -20,13 +21,16 @@ class HomeController extends Controller
 
         $loHangs = $DB::table('lohang')->get();
         $khuyenMais = $DB::table('khuyenmai')->get();
-        $thucPhams = $DB::table('thucpham')->get();
-        //$request->get('')
-
+        $thucPhams = $DB::table('thucpham')->get()->take(8);
+        
+        if(!is_null(Cookie::get('KhachHangIdKH')) && !is_null(Cookie::get('KhachHangName')))
+        {
+            $request->session()->put('KhachHangIdKH', Cookie::get('KhachHangIdKH'));
+            $request->session()->put('KhachHangName', Cookie::get('KhachHangName'));             
+        }
+        
         return view('user/home/index')
-            ->with("KhachHangIdKH", $request->session()->get('KhachHangIdKH'))
-            ->with("GioHangSoLuong", $request->session()->get('GioHang'))
-            ->with("title","Trang chu")
+            ->with("title","Trang chủ")
             ->with("loHangs", $loHangs)
             ->with("khuyenMais", $khuyenMais)
             ->with("thucPhams", $thucPhams);

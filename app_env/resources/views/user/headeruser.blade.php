@@ -189,10 +189,11 @@
                                     }
                                 </script>
                                 
-                                @if (false)
+                                @if (!empty(session()->get('KhachHangIdKH')))
                                     <input id="IsCheckedFB" value="0" type="hidden" />
                                     <div hidden class="g-signin2" data-onsuccess="onSignIn"></div>
-                                    <a class="header__action-item-title hidden-pocket hidden-lap" href="@Url.Action("Index", "Account")">Chào, @HttpContextAccessor.HttpContext.Session.GetString("KhachHangName").ToString() </a>
+                            
+                                    <a class="header__action-item-title hidden-pocket hidden-lap" href="<?php echo url('Account/Index'); ?>">Chào, {{session()->get('KhachHangName')}}</a>
                                 @else
                                     <input id="IsCheckedFB" value="1" type="hidden" />
                                     <a class="header__action-item-title hidden-pocket hidden-lap" id="modal_trigger" href="#modal" onclick="refreshNewError();">Đăng nhập/ Đăng ký</a>
@@ -276,7 +277,7 @@
 
                                                             var rememberDangNhap = document.getElementById("rememberDangNhap").checked;
 
-                                                            var urlDangNhap = "https://" + location.host + "/api/DangNhapKH";
+                                                            var urlDangNhap = "http://" + location.host + "/api/DangNhapKH";
                                                             var taiKhoan = {
                                                                 "email": emailDangNhap,
                                                                 "pass": passDangNhap,
@@ -295,11 +296,16 @@
                                                                 .then(response => response.text())
                                                                 .then(response => {
                                                                     // Do something with response.
-                                                                    if (response.toString() == '"OK"') {
-                                                                        location.href = "https://" + location.host + location.pathname;
+                                                                    // alert(response.toString());
+                                                                    if(response.toString() == '0') {
+                                                                        loiDangNhap.innerHTML = "Tài khoản không tồn tại";
                                                                     }
-                                                                    else {
-                                                                        loiDangNhap.innerHTML = response.toString().replace('"', '').replace('"', '');
+                                                                    if(response.toString() == '1') {
+                                                                        location.href = "http://" + location.host + location.pathname;
+                                                                        //alert(sessionStorage.getItem("KhachHangName")+"0"+session_name('KhachHangName'));
+                                                                    }
+                                                                    if(response.toString() == '2') {
+                                                                        loiDangNhap.innerHTML = "Sai mật khẩu";
                                                                     }
 
                                                                 })
@@ -397,7 +403,7 @@
 
 
                             <div class="header__action-item header__action-item--cart">
-                                <a class="header__action-item-link header__cart-toggle" href="@Url.Action("Index","GioHang")" role="button">
+                                <a class="header__action-item-link header__cart-toggle" href="<?php echo url('GioHang/Index'); ?>" role="button">
                                     <div class="header__action-item-content">
                                         <div class="header__cart-icon icon-state">
                                             <span class="icon-state__primary">
@@ -410,7 +416,7 @@
                                                 </svg>
                                             </span>
                                         </div>
-                                        @if ($GioHangSoLuong != 0)
+                                        @if (!is_null(session()->get('GioHang')))
                                         
                                             <span class="hidden-pocket hidden-lap"> Giỏ hàng ({{$GioHangSoLuong}}) </span>
                                         
