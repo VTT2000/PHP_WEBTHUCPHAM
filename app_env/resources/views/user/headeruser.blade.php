@@ -416,7 +416,7 @@
                                                 </svg>
                                             </span>
                                         </div>
-                                        @if (!is_null(session()->get('GioHang')))
+                                        @if (!empty(session()->get('GioHang')))
                                         
                                             <span class="hidden-pocket hidden-lap"> Giỏ hàng ({{$GioHangSoLuong}}) </span>
                                         
