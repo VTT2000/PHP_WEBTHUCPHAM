@@ -29,44 +29,41 @@ class GioHangController extends Controller
         return $listGioHang;
     }
 
-    
-
     public function ThemGioHang(Request $request)
     {
         $DB = new DB();
-
         $listGH = array();
         $listGH = $this->LayGioHang($request);
-        $sanPham = new GioHang();
+        $sanPham = null;
         
         foreach($listGH as $item){
-            if($item->getIdFood() == $request->query("IdFood")){
+            if($item->getIdFood() == $request->query('IdFood')){
                 $sanPham = $item;
             }
         }
-
+        
         if(empty($sanPham))
         {
-            $a = new Thucpham();
-            $a = $DB::table('thucpham')->where('IdThucPham', $request->query("IdFood"))->first();
+            $a = $DB::table('thucpham')->where('IdThucPham', $request->query('IdFood'))->first();
+            $sanPham = new GioHang();
             $sanPham->setIdFood($a->IdThucPham);
+            
             if (empty($a->IdKhuyenMai))
             {
-                $sanPham->setDonGia($a->Price);
+                $sanPham->setDonGia($a->GiaBan);
             }
             else
             {
-                $b = new Khuyenmai();
                 $b = $DB::table('khuyenmai')->where('IdKhuyenMai', $a->IdKhuyenMai)->first();
-                $sanPham->zDonGia = $a->Price * (100 - $b->PhanTramKhuyenMai) / 100;
+                $sanPham->setDonGia($a->GiaBan * (100 - $b->PhanTramKhuyenMai) / 100);
             }
-            $sanPham->setNameFood($a->NameFood);
+            $sanPham->setNameFood($a->TenThucPham);
             $sanPham->setLinkHinhAnh($a->LinkHinhAnh);
             $sanPham->setSoLuong(1);
 
-            if (!empty($request->get('soLuong')))
+            if (!empty($request->query('soLuong')))
             {
-                $sanPham->zSoLuong = $request->query('soLuong');
+                $sanPham->setSoLuong($request->query('soLuong'));
             }
             array_push($listGH, $sanPham);
             $request->session()->put("GioHang", $listGH);
@@ -85,6 +82,7 @@ class GioHangController extends Controller
             }
             $request->session()->put("GioHang", $listGH);
         }
+        
         return Redirect::to($request->query('strURL'));
     }
     public function Index(Request $request)
@@ -109,11 +107,10 @@ class GioHangController extends Controller
 
     public function ThemMot(Request $request)
     {
-        $listGioHang = array();
-        $listGioHang = $request->session()->get("GioHang");
+        $listGioHang = $this->LayGioHang($request);
         for ($i = 0; $i < count($listGioHang); $i++)
         {
-            if ($listGioHang[$i]->getIdFood == $request->query('IdFood'));
+            if ($listGioHang[$i]->getIdFood() == $request->query('IdFood'))
             {
                 if($listGioHang[$i]->getSoLuong() + 1 > 10)
                 {
@@ -126,19 +123,17 @@ class GioHangController extends Controller
             }
         }
         $request->session()->put("GioHang",$listGioHang);
-        return redirect('Giohang/Index');
+        return redirect('GioHang/Index');
     }
 
     public function GiamMot(Request $request)
     {
-        $listGioHang = array();
-        $listGioHang = $request->session()->get("GioHang");
-        
+        $listGioHang = $this->LayGioHang($request);
         for ($i = 0; $i < count($listGioHang); $i++)
         {
-            if ($listGioHang[$i]->getIdFood == $request->query('IdFood'))
+            if ($listGioHang[$i]->getIdFood() == $request->query('IdFood'))
             {
-                if (($listGioHang[$i]->getSoLuong - 1) < 1)
+                if ($listGioHang[$i]->getSoLuong() - 1 < 1)
                 {
                     $listGioHang[$i]->setSoLuong(1);
                 }
@@ -149,15 +144,14 @@ class GioHangController extends Controller
             }
         }
 
-        $request->put("GioHang", $listGioHang);
-        return redirect('Giohang/Index');
+        $request->session()->put("GioHang", $listGioHang);
+        return redirect('GioHang/Index');
     }
 
 
     public function CapNhatGioHang(Request $request)
     {
-        $listGioHang = array();
-        $listGioHang = $request->session()->get("GioHang");
+        $listGioHang = $this->LayGioHang($request);
         for ($i = 0; $i < count($listGioHang); $i++)
         {
             if ($listGioHang[$i]->getIdFood() == $request->query('IdFood'))
@@ -167,30 +161,28 @@ class GioHangController extends Controller
         }
 
         $request->session()->put("GioHang", $listGioHang);
-        return redirect('Giohang/Index');
+        return redirect('GioHang/Index');
     }
 
     public function DeleteGH(Request $request)
     {
-        $listGH = array();
         $listGH = $this->LayGioHang($request);
         for ($i = 0; $i < count($listGH); $i++)
         {
-            if ($listGH[$i]->getIdFood == $request->query("id"))
+            if ($listGH[$i]->getIdFood() == $request->query('id'))
             {
-                unset($listGH[$i]);
+                array_splice($listGH,$i,1);
             }
         }
         $request->session()->put("GioHang", $listGH);
-        return redirect('Giohang/Index');
+        return redirect('GioHang/Index');
     }
 
 
     private function TongSoLuong(Request $request)
     {
         $zTongSoLuong = 0;
-        $listGH = array();
-        $listGH = $request->session()->get("GioHang");
+        $listGH = $this->LayGioHang($request);
         if(!empty($listGH))
         {
             for ($i = 0; $i < count($listGH); $i++)
@@ -204,8 +196,7 @@ class GioHangController extends Controller
     private function TongTien(Request $request)
     {
         $zTongTien = 0;
-        $listGH = array();
-        $listGH = $request->session()->get("GioHang");
+        $listGH = $this->LayGioHang($request);
         if(!empty($listGH))
         {
             for ($i = 0; $i < count($listGH); $i++)

@@ -25,3 +25,6 @@ Route::controller(DangNhapKHController::class)->group(
     Route::post('/DangNhapKH', 'index');
     //Route::get('/contact-us', 'contact');
 });
+
+
+

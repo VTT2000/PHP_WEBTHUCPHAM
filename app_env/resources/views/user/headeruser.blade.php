@@ -10,7 +10,11 @@
                 <div class="container">
                     <div class="header__inner">
                         <h1 class="header__logo">
-                            <a href="home" class="header__logo-link">
+                            <a href="<?php
+
+use Illuminate\Support\Facades\DB;
+
+ echo url()->to('/'); ?>" class="header__logo-link">
                                 <img class="header__logo-image" style="max-width: 140px" width="941" height="295" src="{{ asset('AdminLTE/img/logo.png') }}" alt="VITAMIN HOUSE">
                             </a>
                         </h1>
@@ -50,7 +54,7 @@
 
                                 <script>
                                     var selectedLTP = document.getElementById("search-product-type");
-                                    var urlSearchLTP = "https://" + location.host + "/api/LoaiThucPhams";
+                                    var urlSearchLTP = location.origin + "/api/LoaiThucPhams";
                                     // url dung nap loai thuc pham
                                     fetch(urlSearchLTP)
                                         .then(response => response.json())
@@ -75,7 +79,7 @@
                                     inputSearchTP.onkeyup = function timkiemSP() {
                                         var htmlStringS = "";
                                         if (inputSearchTP.value.toString().length > 0) {
-                                            var urlSearch = "https://" + location.host + "/api/Search/" + selectedLTP.value + "/" + inputSearchTP.value;
+                                            var urlSearch = location.origin + "/api/Search/" + selectedLTP.value + "/" + inputSearchTP.value;
 
                                             fetch(urlSearch)
                                                 .then(response => response.json())
@@ -156,7 +160,7 @@
                                         FB.api('/me', { locale: 'en_US', fields: 'id,first_name,last_name,email' },
                                             function (response) {
                                                 // goi mot controller action thuong luu thong xong roi dang nhap thuong
-                                                location.href = "https://" + location.host + "/Home/DangNhapFB?fname=" + response.first_name + "&lname=" + response.last_name + "&email=" + response.email;
+                                                location.href = location.origin + "/Home/DangNhapFB?fname=" + response.first_name + "&lname=" + response.last_name + "&email=" + response.email;
                                             }
                                         )
                                     }
@@ -167,7 +171,7 @@
                                     function onSignIn(googleUser) {
                                         var profile = googleUser.getBasicProfile();
                                         if (document.getElementById("IsCheckedFB").value == '1') {
-                                            location.href = "https://" + location.host + "/Home/DangNhapGG?name=" + profile.getName() + "&email=" + profile.getEmail();
+                                            location.href = location.origin + "/Home/DangNhapGG?name=" + profile.getName() + "&email=" + profile.getEmail();
                                         }
                                     }
                                 </script>
@@ -185,7 +189,7 @@
                                         auth2.signOut().then(function () {
                                             //alert('User signed out.');
                                         });
-                                        location.href = "https://" + location.host + "/Home/LogOut";
+                                        location.href = location.origin + "/Home/LogOut";
                                     }
                                 </script>
                                 
@@ -277,7 +281,7 @@
 
                                                             var rememberDangNhap = document.getElementById("rememberDangNhap").checked;
 
-                                                            var urlDangNhap = "http://" + location.host + "/api/DangNhapKH";
+                                                            var urlDangNhap = location.origin + "/api/DangNhapKH";
                                                             var taiKhoan = {
                                                                 "email": emailDangNhap,
                                                                 "pass": passDangNhap,
@@ -286,25 +290,23 @@
                                                             const options = {
                                                                 method: 'POST',
                                                                 headers: {
-                                                                    'Accept': 'application/json',
+                                                                    //'Accept': 'application/json',
                                                                     'Content-Type': 'application/json'
                                                                 },
                                                                 body: JSON.stringify(taiKhoan)
                                                             };
-
-                                                            fetch(urlDangNhap, options)
-                                                                .then(response => response.text())
-                                                                .then(response => {
+                                                            //alert(location.protocol+"@"+location.origin+"@"+location.href);
+                                                            fetch(urlDangNhap, options).then(response => response.text())
+                                                                .then(data => {
                                                                     // Do something with response.
-                                                                    // alert(response.toString());
-                                                                    if(response.toString() == '0') {
+                                                                    if(data.toString() == '0') {
                                                                         loiDangNhap.innerHTML = "Tài khoản không tồn tại";
                                                                     }
-                                                                    if(response.toString() == '1') {
-                                                                        location.href = "http://" + location.host + location.pathname;
+                                                                    if(data.toString() == '1') {
+                                                                        location.href = location.href;
                                                                         //alert(sessionStorage.getItem("KhachHangName")+"0"+session_name('KhachHangName'));
                                                                     }
-                                                                    if(response.toString() == '2') {
+                                                                    if(data.toString() == '2') {
                                                                         loiDangNhap.innerHTML = "Sai mật khẩu";
                                                                     }
 
@@ -351,7 +353,7 @@
                                                                 return;
                                                             }
 
-                                                            var urlDangKy = "https://" + location.host + "/api/DangKyKH";
+                                                            var urlDangKy = location.origin + "/api/DangKyKH";
                                                             var khachHang = {
                                                                 "Email": emailDangKy.value,
                                                                 "Password": passDangKy.value,
@@ -418,7 +420,15 @@
                                         </div>
                                         @if (!empty(session()->get('GioHang')))
                                         
-                                            <span class="hidden-pocket hidden-lap"> Giỏ hàng ({{$GioHangSoLuong}}) </span>
+                                            <span class="hidden-pocket hidden-lap"> Giỏ hàng (<?php
+                                                $list = array();
+                                                $list = session()->get('GioHang');
+                                                $countQuantity = 0;
+                                                foreach($list as $item){
+                                                    $countQuantity = $countQuantity + $item->getSoLuong();
+                                                }
+                                                echo $countQuantity;
+                                            ?>) </span>
                                         
                                         @else
                                         
@@ -445,6 +455,25 @@
                       <ul class="nav-bar__linklist list--unstyled" data-type="menu" role="list">
                         <li class="nav-bar__item"><a href="{{ url('page') }} @Url.Action("Index","ListFood")" class="nav-bar__link link" data-type="menuitem">TẤT CẢ SẢN PHẨM</a></li>
                         <!--@await Component.InvokeAsync("ViewLoaiThucPham")-->
+                        
+                        <li class="nav-bar__item dropdown">
+                        <a href="#" class="nav-bar__link link" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            LOẠI SẢN PHẨM
+                        <svg focusable="false" class="icon icon--arrow-bottom" viewBox="0 0 12 8" role="presentation">
+                            <path stroke="currentColor" stroke-width="2" d="M10 2L6 6 2 2" fill="none" stroke-linecap="square"></path>
+                        </svg>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <?php
+                            $DB = new DB();
+                            $loaiThucPhams = $DB::table('loaithucpham')->get();
+                        ?>
+                        @foreach ($loaiThucPhams as $item)
+                            <li><a class="dropdown-item" href="<?php echo url()->to('/ListFood/FoodTheoLoai?id='.$item->IdLoai) ; ?>">{{$item->TenLoai}}</a></li>
+                        @endforeach
+                        </ul>
+                        </li>
+
                         <li class="nav-bar__item"><a href="@Url.Action("FoodDuocKM","ListFood")" class="nav-bar__link link" data-type="menuitem">KHUYẾN MÃI</a></li>
                         <li class="nav-bar__item"><a href="@Url.Action("Index","CongThucNauAn")" class="nav-bar__link link" data-type="menuitem">BLOG NẤU ĂN</a></li>
                       </ul>

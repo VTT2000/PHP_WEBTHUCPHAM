@@ -73,13 +73,13 @@
                           <div>
                             <div>
                               <div class="product-item product-item--vertical 1/4--lap 1/5--desk 1/6--wide is-selected" style=" left:20%;">
-                                <a href="<?php echo url('Food/index?id='.$item->IdThucPham) ?>" class="product-item__image-wrapper product-item__image-wrapper--with-secondary">
+                                <a href="<?php echo url('Food/Index?id='.$item->IdThucPham) ?>" class="product-item__image-wrapper product-item__image-wrapper--with-secondary">
                                   <div class="aspect-ratio " style="height: 133px; width: 133px; padding-bottom: 100.0%">
                                     <img class="product-item__primary-image image--fade-in lazyautosizes lazyloaded" src="<?php echo $item->LinkHinhAnh ?>" />
                                   </div>
                                 </a><div class="product-item__info">
                                       <div class="product-item__info-inner">
-                                        <a href="<?php echo url('Food/index?id='.$item->IdThucPham) ?>" class="product-item__title text--strong link">{{$item->TenThucPham}}</a>
+                                        <a href="<?php echo url('Food/Index?id='.$item->IdThucPham) ?>" class="product-item__title text--strong link">{{$item->TenThucPham}}</a>
                                         <div class="product-item__price-list price-list">
                                            @if (($item->IdKhuyenMai)!= null)
                                               @foreach($khuyenMais as $item0)
@@ -112,9 +112,9 @@
                                             <?php
                                               $loHangConKo = true;
                                             ?>  
-                                            <form method="get" action="../GioHang/ThemGioHang" id="product_form_id_6806124495026_1624509122e13fa354" accept-charset="UTF-8" class="product-item__action-list button-stack" enctype="multipart/form-data">
-                                                  <input type="hidden" name="IdFood" value="@item.IdFood">
-                                                  <input type="hidden" name="strURL" value="@Context.Request.GetDisplayUrl()">
+                                            <form method="get" action="<?php echo url('GioHang/ThemGioHang'); ?>" id="product_form_id_6806124495026_1624509122e13fa354" accept-charset="UTF-8" class="product-item__action-list button-stack" enctype="multipart/form-data">
+                                                  <input type="hidden" name="IdFood" value="{{$item->IdThucPham}}">
+                                                  <input type="hidden" name="strURL" value="<?php echo url()->current(); ?>">
                                                   <button type="submit" class="product-item__action-button button button--small button--primary" data-action="add-to-cart">Thêm vào giỏ</button>
                                               </form>
                                             @break
