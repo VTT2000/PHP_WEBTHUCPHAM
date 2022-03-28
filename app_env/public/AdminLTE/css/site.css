@@ -496,6 +496,7 @@ b, strong {
 }
 
 #resultBoxSearch {
+  margin-top:50px;
   position: absolute;
   left: 0;
   top: 0;
@@ -507,10 +508,8 @@ b, strong {
   font-size: inherit;
   color: black;
   overflow: auto;
-  border-radius: 10px 10px 3px 3px;
+  border-radius: 5px 5px 5px 5px;
   border-color: black;
-  border-top-right-radius: 10%;
-  border-top-left-radius: 10%;
 }
  #resultBoxSearch>p{
      padding:10px 10px;

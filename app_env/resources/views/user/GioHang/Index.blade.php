@@ -71,7 +71,7 @@
                                                         x.value = "1";
                                                       }
                                                     }
-                                                    location.href = "http://" + location.host + "/GioHang/CapNhatGioHang?IdFood=" + id + "&soLuong=" + x.value;
+                                                    location.href = location.origin + "/GioHang/CapNhatGioHang?IdFood=" + id + "&soLuong=" + x.value;
                                                   }
                                                 </script>
                                                 <button dc-href="<?php echo url('GioHang/ThemMot?IdFood='.$item->getIdFood()) ;?>" onclick="location.href = this.getAttribute('dc-href');" type="button" class="quantity-selector__button" aria-label="Tăng số lượng lên 1" title="Tăng số lượng lên 1">
@@ -131,16 +131,21 @@
                                                             alert("Giỏ hàng bạn đang trống");
                                                             return;
                                                         }
+                                                        
                                                         var n = document.getElementById("DiaChiKH");
                                                         if (n.value.length == 0) {
                                                             alert("Bạn hãy điền địa chỉ trong thông tin cá nhân để thanh toán");
                                                             return;
                                                         }
+                                                        
                                                         else {
-                                                            location.href = "http://" + location.host + "/ThanhToan/Index";
+                                                            location.href = location.origin + "/ThanhToan/Index";
                                                             alert("Bắt đầu chuyển hướng sang trang thanh toán");
                                                             return;
                                                         }
+                                                        location.href = location.origin + "/ThanhToan/Index";
+                                                            alert("Bắt đầu chuyển hướng sang trang thanh toán");
+                                                            return;
                                                     }
                                                     
                                                 }

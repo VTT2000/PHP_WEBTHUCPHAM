@@ -62,7 +62,7 @@ use Illuminate\Support\Facades\DB;
                                             // Do something with response.
                                             var htmlStringSS = "<option value='all' selected='selected'>Tất cả loại thục phẩm</option>";
                                             for (i = 0; i < response.length; i++) {
-                                                htmlStringSS = htmlStringSS + "<option value='" + response[i].idLoai + "' >" + response[i].tenLoai + "</option>"
+                                                htmlStringSS = htmlStringSS + "<option value='" + response[i].IdLoai + "' >" + response[i].TenLoai + "</option>"
                                             }
                                             selectedLTP.innerHTML = htmlStringSS;
                                         })
@@ -85,9 +85,9 @@ use Illuminate\Support\Facades\DB;
                                                 .then(response => response.json())
                                                 .then(response => {
                                                     // Do something with response.
-
+                                                    //alert(response.length);
                                                     for (i = 0; i < response.length; i++) {
-                                                        htmlStringS = htmlStringS + "<p><a href='Food/Index?id=" + response[i].idFood + "' >" + response[i].nameFood + "</a></p>"
+                                                        htmlStringS = htmlStringS + "<p><a href='Food/Index?id=" + response[i].IdThucPham + "' >" + response[i].TenThucPham + "</a></p>"
                                                     }
                                                     result.innerHTML = htmlStringS;
 
@@ -380,7 +380,7 @@ use Illuminate\Support\Facades\DB;
                                                                         passDangKy.value = "";
                                                                     }
                                                                     else {
-                                                                        loiDangKy.innerHTML = response.toString().replace('"', '').replace('"', '');
+                                                                        loiDangKy.innerHTML = JSON.parse(response.toString()).replace('"', '').replace('"', '');
                                                                     }
 
                                                                 })

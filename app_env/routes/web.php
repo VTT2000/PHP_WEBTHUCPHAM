@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\GioHangController;
+use App\Http\Controllers\ThanhToanController;
+
 
 
 /*
@@ -39,6 +41,15 @@ Route::controller(GioHangController::class)->group(
     Route::get('/GioHang/CapNhatGioHang', 'CapNhatGioHang');
     Route::get('/GioHang/DeleteGH', 'DeleteGH');
 });
+
+Route::controller(ThanhToanController::class)->group(
+    //['middleware' => 'web'],
+    function () {
+    Route::get('/ThanhToan/Index', 'Index');
+    Route::get('/ThanhToan/ThanhToanThuong', 'ThanhToanThuong');
+    Route::get('/ThanhToan/ThanhToanPaypal', 'ThanhToanPaypal');
+});
+
 
 //Auth::routes();
 
