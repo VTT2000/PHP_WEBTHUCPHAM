@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Khachhang;
 use App\Models\Theodoithucpham;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -26,19 +27,20 @@ class TheoDoiThucPhamController extends Controller
         $a = $DB::table('khachhang')->where('IdKH', $request->session()->get("KhachHangIdKH"))->first();
         if (!empty($a))
         {
-            $x = $DB::table('theodoithucpham')->where('IdKH', $a->IdKH)->where('IdFood', $a->IdFood)->first();
+            $x = $DB::table('theodoithucpham')->where('IdKH', $a->IdKH)->where('IdFood', $id)->first();
             if (empty($x))
             {
                 $x = new TheoDoiThucPham();
-                $x->IdFood = $a->IdFood;
+                $x->IdFood = $id;
                 $x->IdKH = $a->IdKH;
                 $x->save();
-                return response()->json("1");
+                return response()->json(1);
             }
             else
             {
-                $x->delete();
-                return response()->json("0");
+                $delete = TheoDoiThucPham::find($x->IdTheoDoi);
+                $delete->delete();
+                return response()->json(0);
             }
         }
         else

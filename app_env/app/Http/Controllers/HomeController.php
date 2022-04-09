@@ -34,4 +34,17 @@ class HomeController extends Controller
             ->with("khuyenMais", $khuyenMais)
             ->with("thucPhams", $thucPhams);
     }
+    public function LogOut(Request $request)
+        {
+            if (!empty(Cookie::get("KhachHangIdKH")) && !empty(Cookie::get("KhachHangName")))
+            {
+                Cookie::delete("KhachHangIdKH");
+                Cookie::delete("KhachHangName");
+            }
+
+            $request->session()->put("KhachHangName", "");
+            $request->session()->put("KhachHangIdKH", "");
+            
+            return redirect("Home/Index");
+        }
 }

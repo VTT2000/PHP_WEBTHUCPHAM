@@ -87,7 +87,7 @@ use Illuminate\Support\Facades\DB;
                                                     // Do something with response.
                                                     //alert(response.length);
                                                     for (i = 0; i < response.length; i++) {
-                                                        htmlStringS = htmlStringS + "<p><a href='Food/Index?id=" + response[i].IdThucPham + "' >" + response[i].TenThucPham + "</a></p>"
+                                                        htmlStringS = htmlStringS + "<p><a href='../Food/Index?id=" + response[i].IdThucPham + "' >" + response[i].TenThucPham + "</a></p>"
                                                     }
                                                     result.innerHTML = htmlStringS;
 
@@ -453,8 +453,7 @@ use Illuminate\Support\Facades\DB;
                 <div class="nav-bar__inner">
                     <div class="container">
                       <ul class="nav-bar__linklist list--unstyled" data-type="menu" role="list">
-                        <li class="nav-bar__item"><a href="{{ url('page') }} @Url.Action("Index","ListFood")" class="nav-bar__link link" data-type="menuitem">TẤT CẢ SẢN PHẨM</a></li>
-                        <!--@await Component.InvokeAsync("ViewLoaiThucPham")-->
+                        <li class="nav-bar__item"><a href="<?php echo url("/ListFood/Index");?>" class="nav-bar__link link" data-type="menuitem">TẤT CẢ SẢN PHẨM</a></li>
                         
                         <li class="nav-bar__item dropdown">
                         <a href="#" class="nav-bar__link link" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
@@ -474,9 +473,8 @@ use Illuminate\Support\Facades\DB;
                         </ul>
                         </li>
 
-                        <li class="nav-bar__item"><a href="@Url.Action("FoodDuocKM","ListFood")" class="nav-bar__link link" data-type="menuitem">KHUYẾN MÃI</a></li>
-                        <li class="nav-bar__item"><a href="@Url.Action("Index","CongThucNauAn")" class="nav-bar__link link" data-type="menuitem">BLOG NẤU ĂN</a></li>
-                      </ul>
+                        <li class="nav-bar__item"><a href="<?php echo url("/ListFood/FoodDuocKM");?>" class="nav-bar__link link" data-type="menuitem">KHUYẾN MÃI</a></li>
+                        </ul>
                     </div>
                 </div>
             </nav>
