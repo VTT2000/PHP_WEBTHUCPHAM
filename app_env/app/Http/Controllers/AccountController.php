@@ -85,7 +85,7 @@ class AccountController extends Controller
             }
             $DB = new DB();//update
             $a->exists = true;
-            $a->save();
+            $a->save();// insnert // them exist = true la update
 
             $request->session()->put("KhachHangName",$a->Name);
 

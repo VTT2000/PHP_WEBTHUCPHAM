@@ -11,7 +11,11 @@ use App\Http\Controllers\FoodController;
 use App\Http\Controllers\ListFoodController;
 use App\Http\Controllers\AccountController;
 
-
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ListingController;
+use App\Http\Controllers\AddController;
+use App\Http\Controllers\UpdateController;
+use App\Http\Controllers\DeleteController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,10 +29,10 @@ use App\Http\Controllers\AccountController;
 
 
 
+Route::get('/product',[ProductController::class, 'index']);
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/admin', function () {
-    return view('admin/admin');
-});
+
 
 Route::controller(HomeController::class)->group(
     //['middleware' => 'web'],
@@ -80,10 +84,28 @@ Route::controller(AccountController::class)->group(
 
 Route::get('/Food/Index',[FoodController::class, 'index']);
 
-
-
 //Auth::routes();
 
+Route::get('admin/login', function() {
+    return view('admin.login');
+});
 
+Route::post('/admin/login', [AdminController::class, 'loginPost'])->name('admin.loginPost');
+Route::get('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+//Route::get('/admin/admin', [AdminController::class, 'admin'])->name('admin.admin');
 
+Route::get('admin/admin', function () {
+    return view('admin.admin');
+});
 
+Route::get('/admin/listing/{model}', [ListingController::class, 'index'])->name('listing.index');
+Route::post('/admin/listing/{model}', [ListingController::class, 'index'])->name('listing.index');
+
+Route::get('/admin/add/{model}', [AddController::class, 'create'])->name('add.create');
+Route::post('/admin/add/{model}', [AddController::class, 'store'])->name('add.store');
+
+Route::get('/admin/update/{model}', [UpdateController::class, 'up'])->name('update.up');
+Route::post('/admin/update/{model}', [UpdateController::class, 'updateitem'])->name('update.updateitem');
+
+Route::get('/admin/delete/{model}', [DeleteController::class, 'del'])->name('delete.del');
+Route::post('/admin/delete/{model}', [DeleteController::class, 'deleteitem'])->name('delete.deleteitem');
